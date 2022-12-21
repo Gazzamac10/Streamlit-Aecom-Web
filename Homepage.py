@@ -1,6 +1,7 @@
 import ifcopenshell
 import streamlit as st
 
+
 def callback_upload():
     session["file_name"] = session["uploaded_file"].name
     session["array_buffer"] = session["uploaded_file"].getvalue()
@@ -74,3 +75,4 @@ def main():
 if __name__ == "__main__":
     session = st.session_state
     main()
+

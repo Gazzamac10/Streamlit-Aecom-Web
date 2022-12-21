@@ -59,8 +59,8 @@ def get_high_frequency_entities_graph(file):
     ax.tick_params(axis="x", rotation=90)
     ax.set_xlabel("File Entities")
     ax.set_ylabel("No of occurences")
-    ax.xaxis.label.set_color("red")
-    ax.yaxis.label.set_color("red")
+    ax.xaxis.label.set_color("blue")
+    ax.yaxis.label.set_color("blue")
 
     ax.set_box_aspect(aspect=1 / 2)
     ax.axis()
@@ -77,3 +77,19 @@ def load_graph(dataframe, quantity_set, quantity, user_option):
             values=column_name,
         )
     return figure_pie_chart
+
+
+def load_graph2(dataframe):
+    import plotly.express as px
+    fig = px.scatter(
+        dataframe,
+        x="GDP",
+        y="Life expectancy",
+        size="Population",
+        color="continent",
+        hover_name="Country",
+        log_x=True,
+        size_max=60,
+    )
+    return fig
+
