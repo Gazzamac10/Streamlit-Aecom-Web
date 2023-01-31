@@ -1,5 +1,7 @@
 import os
 import ifcopenshell
+import ifcopenshell.util.element as Element
+import ifcopenshell.api
 import pandas as pd
 from logging import warning
 import streamlit as st
@@ -9,6 +11,9 @@ from tools import graph_maker
 from PIL import Image
 import plotly.express as px
 import plotly.figure_factory as ff
+import numpy as np
+
+st.set_page_config (layout="wide")
 
 # Add custom CSS styles
 st.markdown(
@@ -58,7 +63,7 @@ st.markdown(
             font-family: Arial, sans-serif;
             font-size: 16px;
             text-align: left;
-            padding-left: 50px
+            padding-left: 20px
         }
     </style>
     """,
@@ -67,16 +72,19 @@ st.markdown(
 
 
 # Add title
-st.title("Gary McCarthy Portfolio")
+st.title("Gary McCarthy")
 st.header("Data Fellowship Portfolio")
 # Add image
-image1  = Image.open('C:\\Users\\mccarthyg\\PycharmProjects\\Streamlit-Portfolio\\AdobeStock_185294016.jpg')
+image1  = Image.open('C:\\Users\\mccarthyg\\PycharmProjects\\Streamlit-Portfolio\\iStock_000070095321_Small.jpg')
 st.image(image1)
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 # Add introduction
 st.markdown("<h3>Introduction</h3>", unsafe_allow_html=True)
-st.write("Welcome to the Data Analysis Level 4 Portfolio. This portfolio showcases the advanced data analysis skills and competencies that I have developed through the course, and demonstrates their potential value in a business context.\
-I hope that this portfolio will provide a comprehensive overview of my skills and competencies, and will demonstrate my potential to contribute to the success of Aecom. I am confident that the skills and knowledge\
+st.write("Welcome to the Data Analysis Level 4 Portfolio. This portfolio showcases the advanced data analysis skills \
+and competencies that I have developed through the course, and demonstrates their potential value in a business context.")
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.write("I hope that this portfolio will provide a comprehensive overview of my skills and competencies, and will demonstrate my \
+potential to contribute to the success of Aecom. I am confident that the skills and knowledge\
  I have gained through this course will be valuable and will enable me to make a positive impact in my role at Aecom.")
 
 st.markdown("<h3>Personal Background</h3>", unsafe_allow_html=True)
@@ -94,7 +102,6 @@ As part of the BIM team at Aecom, my role is to create and manage these models t
  in order to identify workflow inefficiencies or predictive patterns that could improve overall project delivery.")
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 st.markdown("<h3></h3>", unsafe_allow_html=True)
-st.markdown("<h3></h3>", unsafe_allow_html=True)
 st.markdown("<h3>Project 1: Automated Data Extraction and Reporting for Building Information Models</h3>", unsafe_allow_html=True)
 st.markdown("<h4>Objective</h4>", unsafe_allow_html=True)
 st.write("The goal of this project is to develop a proof-of-concept automated workflow for extracting relevant data from BIMs and storing it in a database, \
@@ -110,8 +117,6 @@ st.markdown("<p2>- Creating interactive visualizations and reports using the dat
 st.markdown("<h4>Outcomes:</h4>", unsafe_allow_html=True)
 st.write("Upon completion of this project, I expect to have a functional proof-of-concept for an automated data extraction and reporting workflow for Building Information models. This will include a Python script that can extract data from the models and store it in a database, \
 as well as visualizations or reports that demonstrate the potential of the data for identifying missing information, trends and patterns.")
-st.markdown("<h3></h3>", unsafe_allow_html=True)
-st.markdown("<h3></h3>", unsafe_allow_html=True)
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 st.markdown("<h3>Brief overview of “Building Information modeling”</h3>", unsafe_allow_html=True)
 image2  = Image.open('C:\\Users\\mccarthyg\\PycharmProjects\\Streamlit-Portfolio\\Bim2.jpg')
@@ -148,5 +153,86 @@ specific needs and requirements. To do this, a meeting was held with Paul Witham
 information accurate and up-to-date. Based on Paul's input, the available data points in the BIM model were reviewed, and those that were relevant to his needs were selected. \
 Industry standards and best practices were consulted to ensure the data points chosen were appropriate.")
 image4  = Image.open('C:\\Users\\mccarthyg\\PycharmProjects\\Streamlit-Portfolio\\Revit1.jpg')
-resized_image = image4.resize((1000, 500))
+resized_image = image4.resize((1200, 800))
 st.image(resized_image)
+st.write("The next step in the project was to determine the appropriate method for storing the data. After careful consideration, \
+it was decided that using a SQLite database would be the most efficient option due to the lack of available company infrastructure for other database systems. \
+To ensure that the data was stored in the most efficient way possible, an Entity Relationship Diagram (ERD) was created to establish the relationships between \
+the different tables in the database. The data within the 3D model was structured, but when compared to data from other models, it was unstructured, \
+so the ERD and database schema were designed to effectively store the data and support the queries and operations that would be performed on it.")
+image5  = Image.open('C:\\Users\\mccarthyg\\PycharmProjects\\Streamlit-Portfolio\\Figure3.jpg')
+resized_image = image5.resize((1200, 800))
+st.image(resized_image)
+st.write("In order to save time, the decision was made not to fully normalize the database at this stage, but to return to the ERD when a long-term strategy \
+for data storage had been established. In the meantime, the focus was on keeping the database as simple as possible by extracting each category of element into \
+its own table, along with all relevant parameter values.")
+st.write("The process of creating a script to batch export models to IFC files using Python was a multi-step process that included:")
+st.markdown("<p2>- Importing necessary modules: The first step was to import the necessary modules or libraries in Python that were required for the script, \
+including the BIM software's API module, the IFC export <p2>module, and any other necessary libraries for reading and manipulating data.</p2>", unsafe_allow_html=True)
+st.markdown("<p2>- Connecting to the BIM software: The script established a connection to the BIM software using the API module by providing \
+the necessary credentials and connecting to the software's API <p2>endpoint.</p2>", unsafe_allow_html=True)
+st.markdown("<p2>- Identifying models to be exported: The script identified the models that needed to be exported by searching for models in a specific folder. \
+All the models present in that folder were considered for <p2>export.</p2>", unsafe_allow_html=True)
+st.markdown("<p2>- Extracting data: The script then used a loop to extract the necessary data from the identified models using the API's functions and methods.</p2>", unsafe_allow_html=True)
+st.markdown("<p2>- Transforming data to IFC format: The data was then transformed to the IFC format using the IFC export module or library.</p2>", unsafe_allow_html=True)
+st.markdown("<p2>- Error handling: The script included error handling to ensure that any issues that may occur during the process were properly \
+handled and reported.</p2>", unsafe_allow_html=True)
+st.markdown("<p2>- Testing the script: The script was tested with sample data to ensure that it was working as expected and that the exported models \
+were in the correct format.o</p2>", unsafe_allow_html=True)
+st.write("Overall, the process of creating the script was successfully completed and the script was able to batch export models to IFC files using Python.")
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+image5  = Image.open('C:\\Users\\mccarthyg\\PycharmProjects\\Streamlit-Portfolio\\code1.jpg')
+resized_image = image5.resize((800, 600))
+st.image(resized_image)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+image5  = Image.open('C:\\Users\\mccarthyg\\PycharmProjects\\Streamlit-Portfolio\\ifc.jpg')
+resized_image = image5.resize((800, 600))
+st.image(resized_image)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.write("My next step was to write some code that could extract the relevant data points from the IFC file and store them in the SQLite database.")
+image5  = Image.open('C:\\Users\\mccarthyg\\PycharmProjects\\Streamlit-Portfolio\\code2.jpg')
+resized_image = image5.resize((800, 600))
+st.image(resized_image)
+st.write("Figure 6 is an example of code that uses the ifcopenshell library to open and read the IFC file, and the sqlite3 library to connect to \
+and interact with the SQLite database. The script starts by connecting to the IFC file and the SQLite database. It then iterates through all the \
+elements in the IFC file using the by_type method, which is a built-in method of the ifcopenshell library and extracts the element's name and category. \
+For each category of element, the script will create a new table in the SQLite database with columns 'id', 'name', 'category' and any relevant data points, \
+the table name will be the category name. After that, it uses the execute method of sqlite3 to insert the element's name and category into the appropriate table \
+(related to the category of the element). Finally, it commits the changes made to the SQLite database and closes the connection.")
+image5  = Image.open('C:\\Users\\mccarthyg\\PycharmProjects\\Streamlit-Portfolio\\SQLit.jpg')
+resized_image = image5.resize((1200, 600))
+st.image(resized_image)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+image5  = Image.open('C:\\Users\\mccarthyg\\PycharmProjects\\Streamlit-Portfolio\\Model check.jpg')
+resized_image = image5.resize((1200, 600))
+st.image(resized_image)
+st.write("To spot check the Data I returned to the model and extracted the model element Id number and then searched in the database for the same one.")
+st.write("Figure 8 above shows the matched element in the model with the stored database element and a check on Gross_Volume and Gross_weight parameter values to see if they matched up.")
+st.write("Success !! I have a working Database file representing a 3d Model.")
+st.write("Once I had the data in the SQLite database, I had to extract it in a way that would allow me to present it in a simple and accessible format. \
+I decided to use a web page with interactive menus, which would allow users to switch between different parameters and view the charts accordingly.  \
+In order to accomplish this, I first had to extract the data from the SQLite database and convert it into a format that could be easily used in the web page. \
+This involved writing code to connect to the database, retrieve the relevant data, and convert it into a Pandas DataFrame.")
+
+def get_ifc_pandas():
+    data, pset_attributes = ifchelper.get_objects_data_by_class(ifc_file,"IfcBuildingElement")
+    frame = ifchelper.create_pandas_dataframe(data, pset_attributes)
+    return frame
+
+filetemp = './IFC Files/10-132201-0000100595-ACM-STR-MDL-000001_Gary.McCarthy@aecom.ifc'
+ifc_file = ifcopenshell.open(filetemp)
+
+
+pandasdf = get_ifc_pandas()
+pandasdf = pandasdf.fillna(np.NaN)
+
+
+ted = pandasdf.columns
+
+print (len(ted.tolist()))
+
+st.title("DataFrame Review")
+st.write(pandasdf)
+
+
