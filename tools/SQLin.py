@@ -25,13 +25,16 @@ def joindict(listofdicts):
 def makecsv(t, name):
     return t.to_csv(os.path.join('./', str(name) + '.csv'))
 
+
 arr = os.listdir('./Databases')
 
+inde = index
 
-inde = 0
 p = './Databases/'+arr[inde]
 basestr = ''' SELECT * FROM replace '''
 
+
+"""
 con = sqlite3.connect(p)
 mycur = con.cursor()
 mycur.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")
@@ -40,6 +43,8 @@ available_table = ([item[0]for item in mycur.fetchall()])
 tablenames = available_table
 
 table = [gettables(p,item)for item in tablenames]
+"""
+print (table)
 
 
 """
@@ -57,6 +62,7 @@ for i in range(len(table)):
         tabname.append(tablenames[i])
 """
 
+"""
 volumes = []
 vtabname = []
 tableincluded = []
@@ -68,7 +74,7 @@ for i in range(len(table)):
 
 tabs = [pd.DataFrame(item)for item in tableincluded]
 merged_df = pd.concat(tabs)
-
+"""
 
 
 """

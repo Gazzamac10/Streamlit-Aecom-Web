@@ -8,10 +8,12 @@ import streamlit as st
 from tools import ifchelper
 from tools import pandashelper
 from tools import graph_maker
+from tools import SQLin
 from PIL import Image
 import plotly.express as px
 import plotly.figure_factory as ff
 import numpy as np
+
 
 st.set_page_config (layout="wide")
 
@@ -235,4 +237,6 @@ print (len(ted.tolist()))
 st.title("DataFrame Review")
 st.write(pandasdf)
 
+t = SQLin.createDFfromSQL(0)
 
+print (t)
