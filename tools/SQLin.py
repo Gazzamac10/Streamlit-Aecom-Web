@@ -26,25 +26,18 @@ def makecsv(t, name):
     return t.to_csv(os.path.join('./', str(name) + '.csv'))
 
 
-arr = os.listdir('./Databases')
-
-inde = index
-
-p = './Databases/'+arr[inde]
 basestr = ''' SELECT * FROM replace '''
 
+def importtables(path):
+    con = sqlite3.connect(path)
+    mycur = con.cursor()
+    mycur.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")
+    available_table = ([item[0]for item in mycur.fetchall()])
 
-"""
-con = sqlite3.connect(p)
-mycur = con.cursor()
-mycur.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")
-available_table = ([item[0]for item in mycur.fetchall()])
+    tablenames = available_table
 
-tablenames = available_table
-
-table = [gettables(p,item)for item in tablenames]
-"""
-print (table)
+    table = [gettables(path,item)for item in tablenames]
+    return table
 
 
 """

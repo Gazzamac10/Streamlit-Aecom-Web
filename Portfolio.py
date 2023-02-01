@@ -14,7 +14,6 @@ import plotly.express as px
 import plotly.figure_factory as ff
 import numpy as np
 
-
 st.set_page_config (layout="wide")
 
 # Add custom CSS styles
@@ -217,26 +216,31 @@ I decided to use a web page with interactive menus, which would allow users to s
 In order to accomplish this, I first had to extract the data from the SQLite database and convert it into a format that could be easily used in the web page. \
 This involved writing code to connect to the database, retrieve the relevant data, and convert it into a Pandas DataFrame.")
 
-def get_ifc_pandas():
-    data, pset_attributes = ifchelper.get_objects_data_by_class(ifc_file,"IfcBuildingElement")
-    frame = ifchelper.create_pandas_dataframe(data, pset_attributes)
-    return frame
+arr = os.listdir('./Databases')
 
-filetemp = './IFC Files/10-132201-0000100595-ACM-STR-MDL-000001_Gary.McCarthy@aecom.ifc'
-ifc_file = ifcopenshell.open(filetemp)
+inde = 0
+p = './Databases/'+arr[inde]
 
+sqtab = SQLin.importtables((p))
+tabs = [pd.DataFrame(item)for item in sqtab]
+merged_df = pd.concat(tabs)
 
-pandasdf = get_ifc_pandas()
-pandasdf = pandasdf.fillna(np.NaN)
+test = merged_df[merged_df['I_CATEGORY'] == 'Structural Framing']
 
+test2 = test.groupby('I_FAMILY AND TYPE')['I_CATEGORY'].count().reset_index(name='Count')
+test2 = (test2[test2['Count']>10])
 
-ted = pandasdf.columns
-
-print (len(ted.tolist()))
 
 st.title("DataFrame Review")
-st.write(pandasdf)
+st.write(merged_df)
 
-t = SQLin.createDFfromSQL(0)
+graph1 = graph_maker.load_graph3(test2,'I_FAMILY AND TYPE','Count')
+graph2 = graph_maker.load_graph3(test2,'I_FAMILY AND TYPE','Count')
 
-print (t)
+st.plotly_chart(graph1, use_container_width=True, sharing="streamlit", theme="streamlit")
+
+#SQLin.makecsv(merged_df,'merged_df')
+
+
+
+
