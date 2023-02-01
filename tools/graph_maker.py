@@ -1,3 +1,5 @@
+import plotly.express
+
 from tools import ifchelper
 from matplotlib import pyplot as plt
 
@@ -77,6 +79,18 @@ def load_graph(dataframe, quantity_set, quantity, user_option):
             values=column_name,
         )
     return figure_pie_chart
+
+def load_graph3(dataframe,n,v):
+    import plotly.express as px
+    figure_pie_chart = px.pie(
+        dataframe,
+        names=n,
+        values=v,
+        )
+    return figure_pie_chart
+
+
+
 
 def load_graph2(dataframe):
     import plotly.express as px
