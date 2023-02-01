@@ -1,7 +1,6 @@
 import ifcopenshell
 import streamlit as st
 
-
 def callback_upload():
     session["file_name"] = session["uploaded_file"].name
     session["array_buffer"] = session["uploaded_file"].getvalue()
@@ -40,7 +39,6 @@ def main():
     ###  📁 Click on this Gaz_Browse File in the Side Bar to start
     """
     )
-
 
     ## Add File uploader to Side Bar Navigation
     st.sidebar.header('Model Gazza Loader')
