@@ -225,22 +225,42 @@ sqtab = SQLin.importtables((p))
 tabs = [pd.DataFrame(item)for item in sqtab]
 merged_df = pd.concat(tabs)
 
-test = merged_df[merged_df['I_CATEGORY'] == 'Structural Framing']
+def getDFbycat(df1,category):
+    dfna = df1[df1['I_CATEGORY'] == category]
+    dfna = dfna.fillna(np.NaN).reset_index(drop=True)
+    return dfna.dropna(axis = 1, thresh = 1000)
 
-test2 = test.groupby('I_FAMILY AND TYPE')['I_CATEGORY'].count().reset_index(name='Count')
-test2 = (test2[test2['Count']>10])
+strctfrm = getDFbycat(merged_df,'Structural Framing')
 
+def getcountbycat(catDF,param,tol):
+    dfall = catDF.groupby(param)['I_CATEGORY'].count().reset_index(name='Count')
+    return (dfall[dfall['Count']>tol])
+
+structframecount = getcountbycat(strctfrm,'I_FAMILY AND TYPE',10)
+
+test = strctfrm.groupby('I_FAMILY AND TYPE')['I_CUT LENGTH'].agg(['count','sum'])
+
+print(test)
+
+
+st.markdown("<h3></h3>", unsafe_allow_html=True)
 
 st.title("DataFrame Review")
-st.write(merged_df)
+st.write(strctfrm)
 
-graph1 = graph_maker.load_graph3(test2,'I_FAMILY AND TYPE','Count')
-graph2 = graph_maker.load_graph3(test2,'I_FAMILY AND TYPE','Count')
-
-st.plotly_chart(graph1, use_container_width=True, sharing="streamlit", theme="streamlit")
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.title("Structural Framing Metrics")
+graph1 = graph_maker.load_graph3(structframecount,'I_FAMILY AND TYPE','Count')
+graph2 = graph_maker.get_high_frequency_entities_graph2(structframecount,'I_FAMILY AND TYPE','Count')
+col1, col2, = st.columns([0.5,0.5])
+with col1:
+    graph1.update_layout(height=500)
+    st.plotly_chart(graph1, use_container_width=True, sharing="streamlit", theme="streamlit")
+with col2:
+    graph1.update_layout(height=500)
+    st.plotly_chart(graph2, use_container_width=True, sharing="streamlit", theme="streamlit")
 
 #SQLin.makecsv(merged_df,'merged_df')
-
-
 
 
