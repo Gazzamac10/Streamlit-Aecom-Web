@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 
 style = {
-    "figure.figsize": (10, 8),
+    "figure.figsize": (8, 4),
     "axes.facecolor": (0.0, 0.0, 0.0, 0),
     "axes.edgecolor": "white",
     "axes.labelcolor": "white",
@@ -95,10 +95,12 @@ def get_high_frequency_entities_graph2(file,x,y):
     fig, ax = plt.subplots()
     ax.bar(x_values, y_values, width=1, align="center", color="Red", alpha=0.5)
 
-    ax.set_title("IFC")
+    #ax.set_title("IFC")
 
-    ax.tick_params(color="blue", rotation=90, labelsize="7", labelcolor="blue")
+    ax.tick_params(color="blue", rotation=90, labelsize="16", labelcolor="blue")
     ax.tick_params(axis="x", rotation=90)
+    for i, v in enumerate(y_values):
+        ax.text(i, v + 0.1, str(v), color='blue', ha='center', fontsize=12)
     ax.set_xlabel("Family Types")
     ax.set_ylabel("No of occurences")
     ax.xaxis.label.set_color("White")
@@ -109,19 +111,6 @@ def get_high_frequency_entities_graph2(file,x,y):
     # ax.xticks(y_pos, objects, rotation=90, size=10)
     return ax.figure
 
-
-
-def load_graph(dataframe, quantity_set, quantity, user_option):
-    import plotly.express as px
-    if quantity != "Count":
-        column_name = f"{quantity_set}.{quantity}"
-        figure_pie_chart = px.pie(
-            dataframe,
-            names=user_option,
-            values=column_name,
-        )
-    return figure_pie_chart
-
 def load_graph3(dataframe,n,v):
     import plotly.express as px
     figure_pie_chart = px.pie(
@@ -130,9 +119,6 @@ def load_graph3(dataframe,n,v):
         values=v,
         )
     return figure_pie_chart
-
-
-
 
 def load_graph2(dataframe):
     import plotly.express as px
@@ -147,4 +133,10 @@ def load_graph2(dataframe):
         size_max=60,
     )
     return fig
+
+def plotlyBar(dataframe,x,y):
+    import plotly.express as px
+    fig = px.bar(dataframe, x=dataframe[x], y=dataframe[y], color=dataframe[y])
+    return fig
+
 

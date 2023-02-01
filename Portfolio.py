@@ -216,51 +216,51 @@ I decided to use a web page with interactive menus, which would allow users to s
 In order to accomplish this, I first had to extract the data from the SQLite database and convert it into a format that could be easily used in the web page. \
 This involved writing code to connect to the database, retrieve the relevant data, and convert it into a Pandas DataFrame.")
 
-arr = os.listdir('./Databases')
-
-inde = 0
-p = './Databases/'+arr[inde]
-
-sqtab = SQLin.importtables((p))
-tabs = [pd.DataFrame(item)for item in sqtab]
-merged_df = pd.concat(tabs)
+def cleandataframe(df,thresh):
+    dfna = df.fillna(np.NaN).reset_index(drop=True)
+    return dfna.dropna(axis=1, thresh=thresh)
 
 def getDFbycat(df1,category):
     dfna = df1[df1['I_CATEGORY'] == category]
     dfna = dfna.fillna(np.NaN).reset_index(drop=True)
     return dfna.dropna(axis = 1, thresh = 1000)
 
-strctfrm = getDFbycat(merged_df,'Structural Framing')
-
 def getcountbycat(catDF,param,tol):
     dfall = catDF.groupby(param)['I_CATEGORY'].count().reset_index(name='Count')
     return (dfall[dfall['Count']>tol])
 
-structframecount = getcountbycat(strctfrm,'I_FAMILY AND TYPE',10)
+arr = os.listdir('./Databases')
 
-test = strctfrm.groupby('I_FAMILY AND TYPE')['I_CUT LENGTH'].agg(['count','sum'])
+inde = 3
+p = './Databases/'+arr[inde]
 
-print(test)
+sqtab = SQLin.importtables((p))
+tabs = [pd.DataFrame(item)for item in sqtab]
+merged_df = pd.concat(tabs)
+merged_df = cleandataframe(merged_df,1000)
 
+strctfrm = getDFbycat(merged_df,'Structural Framing')
+
+structCATcount = getcountbycat(merged_df,'I_CATEGORY',10)
+
+#test = strctfrm.groupby('I_FAMILY AND TYPE')['I_CUT LENGTH'].agg(['count','sum'])
 
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 
 st.title("DataFrame Review")
-st.write(strctfrm)
+st.write(merged_df)
 
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 st.markdown("<h3></h3>", unsafe_allow_html=True)
-st.title("Structural Framing Metrics")
-graph1 = graph_maker.load_graph3(structframecount,'I_FAMILY AND TYPE','Count')
-graph2 = graph_maker.get_high_frequency_entities_graph2(structframecount,'I_FAMILY AND TYPE','Count')
+st.title("Structural Category Metrics")
+graph1 = graph_maker.load_graph3(structCATcount,'I_CATEGORY','Count')
+graph2 = graph_maker.plotlyBar(structCATcount,'I_CATEGORY','Count')
 col1, col2, = st.columns([0.5,0.5])
 with col1:
     graph1.update_layout(height=500)
-    st.plotly_chart(graph1, use_container_width=True, sharing="streamlit", theme="streamlit")
+    st.plotly_chart(graph1, use_container_width=True)
 with col2:
-    graph1.update_layout(height=500)
-    st.plotly_chart(graph2, use_container_width=True, sharing="streamlit", theme="streamlit")
+    graph2.update_layout(height=500)
+    st.plotly_chart(graph2, use_container_width=True)
 
 #SQLin.makecsv(merged_df,'merged_df')
-
-
