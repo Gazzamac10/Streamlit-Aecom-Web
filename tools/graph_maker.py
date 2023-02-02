@@ -111,14 +111,19 @@ def get_high_frequency_entities_graph2(file,x,y):
     # ax.xticks(y_pos, objects, rotation=90, size=10)
     return ax.figure
 
-def load_graph3(dataframe,n,v):
+
+def load_pie(dataframe,n,v):
     import plotly.express as px
-    figure_pie_chart = px.pie(
-        dataframe,
-        names=n,
-        values=v,
-        )
+    figure_pie_chart = px.pie(dataframe,names=n,values=v)
     return figure_pie_chart
+
+def load_pieTEST(dataframe,n,v):
+    import plotly.express as px
+    figure_pie_chart = px.pie(dataframe,
+        names=n, values=v, color=dataframe[n],
+            color_discrete_sequence=px.colors.carto.Earth)
+    return figure_pie_chart
+
 
 def load_graph2(dataframe):
     import plotly.express as px
@@ -136,7 +141,9 @@ def load_graph2(dataframe):
 
 def plotlyBar(dataframe,x,y):
     import plotly.express as px
-    fig = px.bar(dataframe, x=dataframe[x], y=dataframe[y], color=dataframe[y])
+    fig = px.bar(dataframe, x=dataframe[x], y=dataframe[y],
+        color=dataframe[x],color_discrete_sequence=px.colors.carto.Earth)
     return fig
+
 
 

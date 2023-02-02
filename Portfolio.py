@@ -220,10 +220,10 @@ def cleandataframe(df,thresh):
     dfna = df.fillna(np.NaN).reset_index(drop=True)
     return dfna.dropna(axis=1, thresh=thresh)
 
-def getDFbycat(df1,category):
+def getDFbycat(df1,category,thresh):
     dfna = df1[df1['I_CATEGORY'] == category]
     dfna = dfna.fillna(np.NaN).reset_index(drop=True)
-    return dfna.dropna(axis = 1, thresh = 1000)
+    return dfna.dropna(axis = 1, thresh = thresh)
 
 def getcountbycat(catDF,param,tol):
     dfall = catDF.groupby(param)['I_CATEGORY'].count().reset_index(name='Count')
@@ -231,7 +231,7 @@ def getcountbycat(catDF,param,tol):
 
 arr = os.listdir('./Databases')
 
-inde = 3
+inde = 0
 p = './Databases/'+arr[inde]
 
 sqtab = SQLin.importtables((p))
@@ -239,12 +239,8 @@ tabs = [pd.DataFrame(item)for item in sqtab]
 merged_df = pd.concat(tabs)
 merged_df = cleandataframe(merged_df,1000)
 
-strctfrm = getDFbycat(merged_df,'Structural Framing')
-
 structCATcount = getcountbycat(merged_df,'I_CATEGORY',10)
-
 #test = strctfrm.groupby('I_FAMILY AND TYPE')['I_CUT LENGTH'].agg(['count','sum'])
-
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 
 st.title("DataFrame Review")
@@ -253,9 +249,9 @@ st.write(merged_df)
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 st.title("Structural Category Metrics")
-graph1 = graph_maker.load_graph3(structCATcount,'I_CATEGORY','Count')
+graph1 = graph_maker.load_pieTEST(structCATcount,'I_CATEGORY','Count')
 graph2 = graph_maker.plotlyBar(structCATcount,'I_CATEGORY','Count')
-col1, col2, = st.columns([0.5,0.5])
+col1, col2, = st.columns([0.55,0.45])
 with col1:
     graph1.update_layout(height=500)
     st.plotly_chart(graph1, use_container_width=True)
@@ -263,4 +259,35 @@ with col2:
     graph2.update_layout(height=500)
     st.plotly_chart(graph2, use_container_width=True)
 
-#SQLin.makecsv(merged_df,'merged_df')
+strctFRM = getDFbycat(merged_df,'Structural Framing',1200)
+structFRMcount = getcountbycat(strctFRM,'I_FAMILY',10)
+
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.title("Strucural Framing Metrics")
+graph3 = graph_maker.load_pieTEST(structFRMcount,'I_FAMILY','Count')
+graph4 = graph_maker.plotlyBar(structFRMcount,'I_FAMILY','Count')
+col1, col2, = st.columns([0.6,0.4])
+with col1:
+    graph3.update_layout(height=500)
+    st.plotly_chart(graph3, use_container_width=True)
+with col2:
+    graph4.update_layout(height=500)
+    st.plotly_chart(graph4, use_container_width=True)
+
+
+strctCOL = getDFbycat(merged_df,'Structural Columns',10)
+structCOLcount = getcountbycat(strctCOL,'I_FAMILY',0)
+
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.title("Strucural Column Metrics")
+graph5 = graph_maker.load_pieTEST(structCOLcount,'I_FAMILY','Count')
+graph6 = graph_maker.plotlyBar(structCOLcount,'I_FAMILY','Count')
+col1, col2, = st.columns([0.6,0.4])
+with col1:
+    graph5.update_layout(height=500)
+    st.plotly_chart(graph5, use_container_width=True)
+with col2:
+    graph6.update_layout(height=500)
+    st.plotly_chart(graph6, use_container_width=True)
