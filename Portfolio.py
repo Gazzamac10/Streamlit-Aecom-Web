@@ -231,20 +231,24 @@ def getcountbycat(catDF,param,tol):
 
 arr = os.listdir('./Databases')
 
-inde = 0
+inde = 2
 p = './Databases/'+arr[inde]
 
 sqtab = SQLin.importtables((p))
 tabs = [pd.DataFrame(item)for item in sqtab]
 merged_df = pd.concat(tabs)
-merged_df = cleandataframe(merged_df,1000)
+merged_df = cleandataframe(merged_df,1)
 
-structCATcount = getcountbycat(merged_df,'I_CATEGORY',10)
+structCATcount = getcountbycat(merged_df,'I_CATEGORY',1)
 #test = strctfrm.groupby('I_FAMILY AND TYPE')['I_CUT LENGTH'].agg(['count','sum'])
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 
 st.title("DataFrame Review")
 st.write(merged_df)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.write("Once the data was in the pandas DataFrame, I used Matplotlib to create the visuals for the dashboard. "
+         "These visuals were then embedded in the web page. This approach allowed for a more dynamic and interactive "
+         "experience for the user.")
 
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 st.markdown("<h3></h3>", unsafe_allow_html=True)
@@ -258,13 +262,22 @@ with col1:
 with col2:
     graph2.update_layout(height=500)
     st.plotly_chart(graph2, use_container_width=True)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.write("I presented this proof-of-concept to internal stakeholders. "
+         "They were impressed with the interactive capabilities and suggested "
+         "I include a model health tab that would show some charts with object counts and frequency "
+         "of entities from the model. To implement this, I had to extract additional data from the SQLite database "
+         "and use it to create the charts for the model health tab. This addition made the dashboard even more useful "
+         "for stakeholders as it provided them with more information about the model's health and allowed them to "
+         "make more informed decisions. Below are examples of the model health data that was requested")
 
-strctFRM = getDFbycat(merged_df,'Structural Framing',1200)
-structFRMcount = getcountbycat(strctFRM,'I_FAMILY',10)
+strctFRM = getDFbycat(merged_df,'Structural Framing',1)
+structFRMcount = getcountbycat(strctFRM,'I_FAMILY',0)
 
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 st.markdown("<h3></h3>", unsafe_allow_html=True)
-st.title("Strucural Framing Metrics")
+st.title("Structural Framing Metrics")
 graph3 = graph_maker.load_pieTEST(structFRMcount,'I_FAMILY','Count')
 graph4 = graph_maker.plotlyBar(structFRMcount,'I_FAMILY','Count')
 col1, col2, = st.columns([0.6,0.4])
@@ -276,12 +289,12 @@ with col2:
     st.plotly_chart(graph4, use_container_width=True)
 
 
-strctCOL = getDFbycat(merged_df,'Structural Columns',10)
+strctCOL = getDFbycat(merged_df,'Structural Columns',1)
 structCOLcount = getcountbycat(strctCOL,'I_FAMILY',0)
 
 st.markdown("<h3></h3>", unsafe_allow_html=True)
 st.markdown("<h3></h3>", unsafe_allow_html=True)
-st.title("Strucural Column Metrics")
+st.title("Structural Column Metrics")
 graph5 = graph_maker.load_pieTEST(structCOLcount,'I_FAMILY','Count')
 graph6 = graph_maker.plotlyBar(structCOLcount,'I_FAMILY','Count')
 col1, col2, = st.columns([0.6,0.4])
@@ -291,3 +304,27 @@ with col1:
 with col2:
     graph6.update_layout(height=500)
     st.plotly_chart(graph6, use_container_width=True)
+
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.markdown("<h4>Conclusion:</h4>", unsafe_allow_html=True)
+st.write("In conclusion, the proof-of-concept project was a success. We were able to extract, "
+         "store and visualize data from Building Information Models using a code-based approach. "
+         "The use of Python and libraries such as Pandas Dataframes and Matplotlib allowed us to easily "
+         "extract the data we needed and present it in a way that was most useful for stakeholders.")
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.write("The interactive web page we created was well received by internal stakeholders and provided "
+         "them with valuable insights and information about the models. With this proof-of-concept, "
+         "we can now move forward and extract data from all models across the company. This data can "
+         "be used for analytics and predictive model making, which will lead to improvements in overall "
+         "project delivery. It will be important to keep in mind privacy regulations such as GDPR in the "
+         "future, but for now, I can focus on the possibilities that this data can bring to the company.")
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.write("Completing this project has helped my professional development and I have established myself within "
+         "Aecom as someone who understands the potential of what harnessing this Data could mean to project accuracy "
+         "and productivity. This has meant that I have been given the time and backing to pursue the next steps "
+         "of Analysing the stored Data.")
+
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.markdown("<h3></h3>", unsafe_allow_html=True)
+st.markdown("<h3>Project 2: Machine Learning Price Prediction Model</h3>", unsafe_allow_html=True)
+
